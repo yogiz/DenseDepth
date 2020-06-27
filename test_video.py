@@ -29,19 +29,22 @@ def get_depth(cap):
     outputs = predict(model, inputs)
     return outputs.copy()
 
-def grab_frame(cap):
-    ret,frame = cap.read()
+def grab_frame():
+    cap1 = cv2.VideoCapture("http://192.168.1.8:8080/video/mjpeg")
+    # cap1 = cv2.VideoCapture(0)
+
+    ret,frame = cap1.read()
+    cap1.release()
+
     return cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
 
 
-# cap1 = cv2.VideoCapture("http://192.168.1.4:8080/video/mjpeg")
-cap1 = cv2.VideoCapture(0)
 
-resCap = grab_frame(cap1)
+resCap = grab_frame()
 
 
 fig=plt.figure(figsize=(30,10))
-columns = 3
+columns = 2
 rows = 1
 
 fig.add_subplot(rows, columns, 1)
@@ -51,14 +54,7 @@ plt.xticks([])
 plt.yticks([])
 
 fig.add_subplot(rows, columns, 2)
-# im2 = plt.imshow(resCap)
 im2 = plt.imshow(display_images(get_depth(resCap)))
-
-plt.xticks([])
-plt.yticks([])
-
-fig.add_subplot(rows, columns, 3)
-im3 = plt.imshow(resCap)
 
 plt.xticks([])
 plt.yticks([])
@@ -66,11 +62,9 @@ plt.yticks([])
 plt.ion()
 
 while True:
-    resCap = grab_frame(cap1)
+    resCap = grab_frame()
     im1.set_data(resCap)
-    # im2.set_data(resCap)
     im2.set_data(display_images(get_depth(resCap)))
-    im3.set_data(resCap)
 
     plt.pause(0.2)
 
